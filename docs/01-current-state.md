@@ -17,7 +17,8 @@ claim.
 | `bbs-web` | Server-rendered web front end over the same database | HTTP 8080 behind Traefik |
 
 Both `bbs` and `bbs-aprs` run `ghcr.io/ea7klk/simple-ham-bbs` at the same digest.
-`bbs-web` runs `ghcr.io/ea7klk/ham-bbs-web`. The two claims are 1 GiB and 2 GiB,
+`bbs-web` runs `ghcr.io/ea7klk/ham-bbs-web`. The two claims are 1 GiB
+(`/config/ssh`, the host keys) and 2 GiB (`/var/lib/bbs`, the shared database),
 `retained-local-path`, ReadWriteOnce, so every pod that mounts them is pinned to
 one node.
 
@@ -165,7 +166,7 @@ keep them unless an ADR says otherwise.
 | --- | --- | --- |
 | Process per SSH session | `sshd_config` `ForceCommand` | O(users) startup per connection; 4.6 s at 10 000 |
 | Rules implemented twice | `ham-bbs-web/AGENTS.md` invariant 0 | Every rule change is two changes, and they drift |
-| Two writers on one SQLite file | SSH app and web app both write | Lost-update risk mitigated by `_txlock=immediate`, but not removed |
+| Two writers on one SQLite file | SSH app and web app both write, and both run schema backfills | Write serialisation holds only while every path uses `_txlock=immediate`; two applications own one schema |
 | Rate limits in two places | SQLite in SSH, memory in web | A caller gets a different budget per surface |
 | APRS send path in both apps | `handlers_aprs.go` and `aprs.go` both dial APRS-IS | Two senders and two rate limiters for messages, and a third path for login beacons, all outside the APRS service |
 | Passcode persisted per message | `db_aprs_sents.passcode` | A derived value stored as if it were a secret |

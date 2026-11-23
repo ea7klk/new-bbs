@@ -73,8 +73,9 @@ format is its own, so migration is a conversion project.
 
 Mature Pascal BBS with telnet and SSH, a strong sysop toolchain, and a loyal
 following. The maintained 1.12 line is not open source; the public repository is
-a clone of 1.10a30. No REST API, no APRS, and a schema that would have to be
-reached through its own tooling. A poor fit for a GitOps, API-first deployment.
+a clone of 1.10a30. It has no documented REST API and no APRS, and its schema
+would have to be reached through its own tooling. A poor fit for a GitOps,
+API-first deployment.
 
 ### Citadel / WebCit
 
@@ -87,10 +88,10 @@ WebCit is the best browser UI in the survey and the worst data-model fit.
 ### LinBPQ / FBB
 
 Ham-specific packet BBS and node software. They speak AX.25, run store-and-forward
-traffic, and have telnet and web access in some configurations. They are a
-different product category: no community boards, no APRS messaging UX, no modern
-API. They would be the right answer to "how do I run a packet BBS on 2 m", not
-to this brief.
+traffic, and offer telnet access, with separate web front ends in some
+deployments. They are a different product category: no community boards, no APRS
+messaging UX, no modern API. They would be the right answer to "how do I run a
+packet BBS on 2 m", not to this brief.
 
 ### Enthral, MagickaBBS, Talisman
 

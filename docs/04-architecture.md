@@ -203,8 +203,9 @@ that, but stops making it worse:
 
 ### Transport authentication
 
-- **SSH**: host keys from a Secret or the data volume. Callers authenticate with
-  public key, or with a transport password when `BBS_SSH_PASSWORD_AUTH=true`.
+- **SSH**: host keys from a Secret (preferred, so they survive a claim change)
+  or the existing `/config/ssh` volume. Callers authenticate with public key, or
+  with a transport password when `BBS_SSH_PASSWORD_AUTH=true`.
   The SSH username is ignored; the BBS asks for the callsign. On HamNet only,
   `BBS_SSH_NO_AUTH=true` may disable transport authentication, and the
   NetworkPolicy must be verified before that is enabled.
@@ -303,6 +304,7 @@ Fully specified in [06-aprs.md](06-aprs.md). The architectural points:
 | `Service/bbs-metrics` | ClusterIP for 9090, scraped by the existing stack |
 | `IngressRoute/bbs-ssh` or `hostPort` | TCP 2222 to the Service, preserving the current public port |
 | `PersistentVolumeClaim/data` | One claim, ReadWriteOnce, mounted at `/var/lib/bbs` |
+| `Secret/bbs-ssh-host-keys` | The three SSH host keys, carried over so fingerprints do not change |
 | `IngressRoute/bbs-web` | `bbs.ea7klk.es` over HTTPS |
 | `IngressRoute/bbs-hamnet` | HTTP router for the HamNet address, allow-listed to `44.0.0.0/8` |
 | `NetworkPolicy/bbs` | SSH from anywhere; telnet from HamNet and the cluster only; HTTP from Traefik |
